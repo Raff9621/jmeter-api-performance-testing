@@ -1,0 +1,24 @@
+name: Automated API Regression Suite
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install Newman
+      run: npm install -g newman
+
+    - name: Run Postman Tests
+      run: newman run "My Collection.postman_collection.json"
