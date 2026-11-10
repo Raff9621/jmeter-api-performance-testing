@@ -1,0 +1,179 @@
+{
+  "info": {
+    "_postman_id": "cc3151e4-3464-4628-ad63-80d9625b2d1b",
+    "name": "My Collection",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58838521",
+    "_collection_link": "https://go.postman.co/collection/58838521-cc3151e4-3464-4628-ad63-80d9625b2d1b?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Mappatura Test_Cases_",
+      "item": [
+        {
+          "name": "TC-FUN-002",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://jsonplaceholder.typicode.com/posts",
+              "protocol": "https",
+              "host": [
+                "jsonplaceholder",
+                "typicode",
+                "com"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC-FUN-002_Ricerca_prodotto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Verifica che lo stato sia 200 OK\r\npm.test(\"Stato risposta 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Verifica che l'elenco dei prodotti cercati non sia vuoto\r\npm.test(\"La ricerca restituisce almeno un prodotto\", function () {\r\n    var jsonData = pm.response.json();\r\n    pm.expect(jsonData.products.length).to.be.above(0);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"products\": [\r\n    {\r\n      \"id\": 1,\r\n      \"title\": \"iPhone 9\",\r\n      \"description\": \"An apple mobile which is discovered by cellphone...\",\r\n      \"price\": 549,\r\n      \"category\": \"smartphones\"\r\n    }\r\n  ],\r\n  \"total\": 1,\r\n  \"skip\": 0,\r\n  \"limit\": 30\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://dummyjson.com/products/search?q=phone",
+              "protocol": "https",
+              "host": [
+                "dummyjson",
+                "com"
+              ],
+              "path": [
+                "products",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "phone"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC-FUN-003-ADD_TO_CART",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Prodotto aggiunto con successo (200 o 201)\", function () {\r\n    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r\n});\r\n\r\npm.test(\"Il carrello contiene il prodotto corretto\", function () {\r\n    var jsonData = pm.response.json();\r\n    pm.expect(jsonData.products).to.be.an('array');\r\n    pm.expect(jsonData.products.length).to.be.above(0);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": 1,\r\n  \"products\": [\r\n    {\r\n      \"id\": 1,\r\n      \"quantity\": 1\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://dummyjson.com/carts/add",
+              "protocol": "https",
+              "host": [
+                "dummyjson",
+                "com"
+              ],
+              "path": [
+                "carts",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login_campi_vuoti_(NEGATIVO)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Il test negativo blocca l'accesso (Stato 400 o 422 o 400)\", function () {\r\n    // Ci aspettiamo un codice di errore (es. 400 o 422) perché i dati non sono validi\r\n    pm.expect(pm.response.code).to.be.oneOf([400, 422, 401]);\r\n});\r\n\r\npm.test(\"La risposta contiene un messaggio di errore\", function () {\r\n    var jsonData = pm.response.json();\r\n    // Verifichiamo che il server restituisca una spiegazione dell'errore\r\n    pm.expect(jsonData).to.have.property('message');\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"\",\r\n  \"password\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://dummyjson.com/auth/login",
+              "protocol": "https",
+              "host": [
+                "dummyjson",
+                "com"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
